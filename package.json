@@ -1,6 +1,6 @@
 {
   "name": "teslo-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JSON-first CLI wrapper for teslo",
   "type": "module",
   "author": "William Grosset",
@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/williamgrosset/teslo-cli.git"
   },
-  "homepage": "https://github.com/williamgrosset/teslo-cli#readme",
+  "homepage": "https://teslo.dev",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

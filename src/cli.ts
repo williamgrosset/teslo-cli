@@ -35,7 +35,7 @@ sharedOptions(cli.command('team-free-for-all', 'Calculate a team free-for-all re
 )
 
 cli.help()
-cli.version('0.1.0')
+cli.version('0.1.1')
 
 try {
   cli.parse()
