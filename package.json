@@ -1,0 +1,46 @@
+{
+  "name": "teslo-cli",
+  "version": "0.1.0",
+  "description": "JSON-first CLI wrapper for teslo",
+  "type": "module",
+  "author": "William Grosset",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamgrosset/teslo-cli.git"
+  },
+  "homepage": "https://github.com/williamgrosset/teslo-cli#readme",
+  "bin": {
+    "teslo": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "dev": "bun run --watch src/cli.ts",
+    "test": "bun test",
+    "prepublishOnly": "bun run build && bun test"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "teslo": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.1",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "teslo",
+    "cli",
+    "elo",
+    "rating",
+    "json",
+    "automation"
+  ]
+}
