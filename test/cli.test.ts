@@ -45,8 +45,11 @@ describe('cli integration', () => {
     }
   })
 
-  test('accepts piped stdin input', () => {
-    const result = runCli(['duel'], '{"players":[{"id":"1","elo":1000},{"id":"2","elo":900}],"winner":"1"}')
+  test('accepts piped stdin input', async () => {
+    const result = await runCliWithStdin(
+      ['duel'],
+      '{"players":[{"id":"1","elo":1000},{"id":"2","elo":900}],"winner":"1"}'
+    )
 
     expect(result.status).toBe(0)
     expect(JSON.parse(result.stdout)).toEqual([
@@ -117,4 +120,35 @@ function runCli(args: string[], input?: string) {
     encoding: 'utf8',
     input
   })
+}
+
+async function runCliWithStdin(args: string[], input: string) {
+  const dir = await mkdtemp(join(tmpdir(), 'teslo-cli-stdin-'))
+  const file = join(dir, 'stdin.json')
+
+  try {
+    await writeFile(file, input)
+
+    return spawnSync(
+      'sh',
+      [
+        '-lc',
+        'cat "$TESLO_STDIN_FILE" | "$TESLO_BIN" "$TESLO_CLI" "$@"',
+        'sh',
+        ...args
+      ],
+      {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          TESLO_BIN: process.execPath,
+          TESLO_CLI: cliPath,
+          TESLO_STDIN_FILE: file
+        }
+      }
+    )
+  } finally {
+    await rm(dir, { recursive: true, force: true })
+  }
 }
