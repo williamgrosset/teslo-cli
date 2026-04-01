@@ -123,32 +123,18 @@ function runCli(args: string[], input?: string) {
 }
 
 async function runCliWithStdin(args: string[], input: string) {
-  const dir = await mkdtemp(join(tmpdir(), 'teslo-cli-stdin-'))
-  const file = join(dir, 'stdin.json')
-
-  try {
-    await writeFile(file, input)
-
-    return spawnSync(
-      'sh',
-      [
-        '-lc',
-        'cat "$TESLO_STDIN_FILE" | "$TESLO_BIN" "$TESLO_CLI" "$@"',
-        'sh',
-        ...args
-      ],
-      {
-        cwd: repoRoot,
-        encoding: 'utf8',
-        env: {
-          ...process.env,
-          TESLO_BIN: process.execPath,
-          TESLO_CLI: cliPath,
-          TESLO_STDIN_FILE: file
-        }
+  return spawnSync(
+    'sh',
+    ['-lc', 'printf %s "$TESLO_STDIN" | "$TESLO_BIN" "$TESLO_CLI" "$@"', 'sh', ...args],
+    {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        TESLO_BIN: process.execPath,
+        TESLO_CLI: cliPath,
+        TESLO_STDIN: input
       }
-    )
-  } finally {
-    await rm(dir, { recursive: true, force: true })
-  }
+    }
+  )
 }
